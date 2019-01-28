@@ -1,0 +1,33 @@
+<div class="notas-container">
+    {% if perms.escuela.add_notaalumno %}
+        <div class="row">
+            <div class="m-b-10 col-xs-12">
+                <button id="addNotaBtn" class="btn-primary btn pull-right btn-lg">Agregar Nota</button>
+            </div>
+        </div>
+    {% endif %}
+    {% for nota in object.notas.all %}
+        <div class="nota-wrap row">
+            <div class="nota-avatar col-sm-1">
+                <img class="avatar-img" src="{{ nota.usuario.get_image }}" alt="">
+            </div>
+
+            <div class="nota-cont col-sm-11">
+                {% if perms.escuela.delete_notaalumno or request.user == nota.usuario %}
+                    <div class="eliminar-nota pull-right" style="margin-left: 15px">
+                        <form action="{% url 'escuela:alumno-eliminar-nota' nota.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger waves-effect"><i class="zmdi zmdi-delete"></i></button>
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="nota-time pull-right"><b>{{ nota.fecha |date:'DATETIME_FORMAT' }}</b></div>
+                <div class="nota-user palette-Teal-700 text">{{ nota.usuario.get_full_name }}</div>
+                <div class="nota-text"><small>{{ nota.nota }}</small></div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="center">Sin notas</p>
+    {% endfor %}
+</div>
+

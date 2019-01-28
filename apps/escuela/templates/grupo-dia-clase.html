@@ -1,0 +1,118 @@
+{% extends 'base_template.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+        </div>
+        <div class="card-body card-padding">
+
+            <div id="info-alumno">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h2 class="palette-Grey-700 text">Grupo: {{ grupo.nivel }}{{ grupo.grupo }} {{ grupo.periodo.get_semestre_display }} {{ grupo.periodo.ano }}</h2>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="palette-Teal-500 text">Días de Clase</h4>
+            <table class="table table-bordered m-b-25">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Día</th>
+                        <th>Hora inicio</th>
+                        <th>Hora fin</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dia in grupo.dias.all %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ dia.dia }}</td>
+                            <td>{{ dia.hora_inicio }}</td>
+                            <td>{{ dia.hora_fin }}</td>
+                            <td>
+                                <form action="{% url 'escuela:grupos-horario-delete' grupo.pk dia.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger waves-effect"><i class="zmdi zmdi-delete"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">Sin días de clase agregados</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+
+
+            <h4 class="palette-Teal-500 text">Agregar Día de clase</h4>
+            <form role="form" class="form-horizontal m-l-20" method="post" novalidate>
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-2">
+                                    <label for="{{ form.dia.id_for_label }}" class="control-label">{{ form.dia.label }}</label>
+                                </div>
+                                <div class="col-xs-8">
+                                    {{ form.dia }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="form-group input-group">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label for="form.hora_inicio.id_for_label" class="control-label p-t-10">{{ form.hora_inicio.label }}</label>
+                                </div>
+                                <div class="col-xs-4">
+                                    {{ form.hora_inicio }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <div class="form-group input-group">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label for="form.hora_fin.id_for_label" class="control-label p-t-10">{{ form.hora_fin.label }}</label>
+                                </div>
+                                <div class="col-xs-4">
+                                    {{ form.hora_fin }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <button type="submit" class="btn btn-primary btn-sm m-t-10 pull-right">Agregar</button>
+                    </div>
+                </div>
+
+            </form>
+            <div class="form-group fg-float">
+                <div class="col-sm-6">
+                    <a href="{% url 'escuela:grupos-update' grupo.pk %}" class="btn btn-default btn-sm m-t-10 pull-left">Regresar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'template/vendors/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js' %}"></script>
+    <script>
+        $(".time-picker").datetimepicker({
+            format: 'H:mm',
+            useCurrent: false
+        });
+    </script>
+{% endblock %}

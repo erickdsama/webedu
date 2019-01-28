@@ -1,0 +1,83 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block content %}
+    <div class="c-header">
+        <h2 class="title-page">Lista de docentes</h2>
+    </div>
+    <div class="card card-main">
+        {% if perms.usuarios.add_docente %}
+            <a href="{% url 'escuela:docentes-create' %}" class="btn btn-float btn-danger m-btn waves-effect waves-circle waves-float"><i class="zmdi zmdi-plus"></i></a>
+        {% endif %}
+        <div class="list-group">
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+{#                            <th>Grupos</th>#}
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for docente in object_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ docente.get_full_name}}</td>
+                                <td>{{ docente.email }}</td>
+                                <td>{{ docente.telefono }}</td>
+{#                                <td>#}
+{#                                    {% for group in docente.groups.all %}#}
+{#                                        <span class="label label-info">{{ group.name |capfirst }}</span>#}
+{#                                    {% endfor %}#}
+{#                                </td>#}
+                                <td>
+                                    <a href="{% url 'escuela:docente-detail' docente.pk %}" class="btn btn-info btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-eye"></i></a>
+                                    {% if perms.usuarios.change_docente %}
+                                        <a href="{% url 'escuela:docente-update' docente.pk %}" class="btn btn-warning btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-edit"></i></a>
+                                    {% endif %}
+                                    {% if perms.usuarios.delete_docente %}
+                                        <button data-delete-url="{% url 'escuela:docente-delete' docente.pk %}" class="btn btn-danger btn-icon waves-effect waves-circle waves-float sa-warning"><i class="zmdi zmdi-delete"></i></button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="center-align">No se encontraron docentes</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <form action="" id="eliminarDocente" method="post">
+        {% csrf_token %}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'template/vendors/bower_components/Waves/dist/waves.min.js' %}"></script>
+    <script src="{% static 'template/vendors/bootstrap-growl/bootstrap-growl.min.js' %}"></script>
+    <script src="{% static 'template/vendors/bootgrid/jquery.bootgrid.updated.min.js' %}"></script>
+    <!-- Data Table -->
+    <script>
+        $('.sa-warning').click(function(){
+            var urlDelete = $(this).attr("data-delete-url");
+            swal({
+                title: "Estás seguro?",
+                text: "Al eliminar un docente también se eliminará toda la infromación relacionada.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f44336",
+                confirmButtonText: "Si, eliminar!",
+                closeOnConfirm: false
+            }, function(){
+                $("form#eliminarDocente").attr('action', urlDelete).submit();
+{#                swal("Exito!", "Se eliminó el alumno.", "success");#}
+            });
+        });
+    </script>
+{% endblock %}

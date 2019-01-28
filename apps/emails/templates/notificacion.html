@@ -1,0 +1,7 @@
+{% extends 'base_email.html' %}
+
+{% block container %}
+    <p>Hola <b>{{ user.nombre }}!</b> tienes una nueva notificación en el sistema:</p>
+    <p>{{ notificacion.texto }}</p>
+    <p>Para ver en el sitema da clic en el siguiente enlace: <a href="{{ site.domain }}{{ notificacion.get_notificacion_url }}">{{ site.domain }}{{ notificacion.get_notificacion_url }}</a></p>
+{% endblock %}

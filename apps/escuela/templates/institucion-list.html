@@ -1,0 +1,179 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block content %}
+    <div class="card card-main">
+        {% if perms.escuela.add_institucion %}
+            <a href="{% url 'escuela:instituciones-create' %}" class="btn btn-float btn-danger m-btn waves-effect waves-circle waves-float"><i class="zmdi zmdi-plus"></i></a>
+        {% endif %}
+        <div class="list-group">
+            <div class="card-body table-responsive">
+                <div class="form-filtros p-b-0 p-t-20 p-r-20 p-l-20">
+                    <form class="row" role="form" id="formFiltros">
+                        <div class="col-sm-3">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.buscar }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-1">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.sector }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.nivel }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.subnivel }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+{#                            <label class="fg-label">{{ filtrosForm.supervisor.label }}</label>#}
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.supervisor }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+{#                            <label class="fg-label">{{ filtrosForm.supervisor.label }}</label>#}
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.nivel_practicas }}
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th width="2%">#</th>
+                            <th width="15%">Nombre</th>
+                            <th width="10%">Teléfono</th>
+                            <th width="10%">Contacto</th>
+                            <th width="5%">Sector</th>
+                            <th width="5%">Nivel</th>
+                            <th width="5%">Subnivel</th>
+                            <th width="10%">Supervisores</th>
+                            <th width="3%">Status</th>
+                            <th width="40%">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for institucion in object_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>
+                                    {% if institucion.proyectos.count == 0 %}
+                                        <span class="palette-Grey-500 text">{{ institucion.nombre }}</span>
+                                        {% else %}
+                                        {{ institucion.nombre }}
+                                    {% endif %}
+
+                                </td>
+                                <td>{{ institucion.telefono }}</td>
+                                <td>{{ institucion.contacto_directo }}</td>
+                                <td>{{ institucion.sector }}</td>
+                                <td>{{ institucion.nivel |default:'N/A' }}</td>
+                                <td>{{ institucion.subnivel |default:'N/A' }}</td>
+                                <td>
+                                    {% for supervisor in institucion.supervisores.all %}
+                                        <span class="label label-info">{{ supervisor.usuario.nombre }} {{ supervisor.usuario.apellido_paterno }}</span>
+                                        {% if not forloop.last %}
+                                            <br>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% if institucion.status %}
+                                        <span class="c-green f-16">Activa</span>
+                                        {% else %}
+                                        <span class="c-red f-16">Inactiva</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'escuela:instituciones-detail' institucion.pk %}" class="btn btn-info btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-eye"></i></a>
+                                    {% if perms.escuela.change_institucion %}
+                                        <a href="{% url 'escuela:instituciones-update' institucion.pk %}" class="btn btn-warning btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-edit"></i></a>
+                                    {% endif %}
+                                    {% if perms.escuela.delete_institucion %}
+
+                                        <button data-delete-url="{% url 'escuela:instituciones-delete' institucion.pk %}" class="btn btn-danger btn-icon waves-effect waves-circle waves-float sa-warning"><i class="zmdi zmdi-delete"></i></button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="9" class="center-align">No se encontraron instituciones</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {#                 Paginacion#}
+                <ul class="pagination lg-pagination">
+                    {% if page_obj.has_previous %}
+                        <li>
+                            <a href="?pagina={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                                <i class="zmdi zmdi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for page in paginator.page_range %}
+                        {% if page == page_obj.number %}
+                            <li class="active"><a href="">{{ page }}</a></li>
+                            {% else %}
+                            <li class=""><a href="?pagina={{ page }}&{{ filtrosPaginacion }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li>
+                            <a href="?pagina={{ page_obj.next_page_number }}" aria-label="Siguiente">
+                                <i class="zmdi zmdi-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <p class="p-l-25">Total de instituciones: {{ paginator.count }}</p>
+            </div>
+        </div>
+    </div>
+    <form action="" id="eliminarInstitucion" method="post">
+        {% csrf_token %}
+    </form>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'template/vendors/bower_components/Waves/dist/waves.min.js' %}"></script>
+    <script src="{% static 'template/vendors/bootstrap-growl/bootstrap-growl.min.js' %}"></script>
+    <script src="{% static 'template/vendors/bootgrid/jquery.bootgrid.updated.min.js' %}"></script>
+    <!-- Data Table -->
+    <script>
+        $('.sa-warning').click(function(){
+            var urlDelete = $(this).attr("data-delete-url");
+            swal({
+                title: "Estás seguro?",
+                text: "Al eliminar una institución también se eliminará toda la infromación relacionada como los proyectos.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f44336",
+                confirmButtonText: "Si, eliminar!",
+                closeOnConfirm: false
+            }, function(){
+                $("form#eliminarInstitucion").attr('action', urlDelete).submit();
+{#                swal("Exito!", "Se eliminó el alumno.", "success");#}
+            });
+
+        });
+        $(function () {
+            $('form#formFiltros select, form#formFiltros input').on('change', function () {
+                $("#formFiltros").submit();
+            });
+        });
+    </script>
+{% endblock %}

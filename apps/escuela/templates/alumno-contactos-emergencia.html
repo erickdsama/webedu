@@ -1,0 +1,82 @@
+<table class="table table-striped" id="contactos-emergencia-table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Dirección</th>
+            {% if perms.escuela.delete_contactoemergencia %}
+                <th>Eliminar</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for contacto in alumno.contactos_emergencia.all %}
+            <tr>
+                <td>{{ contacto.nombre }}</td>
+                <td>{{ contacto.telefono }}</td>
+                <td>{{ contacto.direccion }}</td>
+                <td>
+                    {% if request.user.is_capturista or request.user.is_supervisor or request.user.is_admin %}
+                        <form action="{% url 'escuela:alumno-detail' alumno.pk 'contactos_emergencia' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="accion" value="contactoEmergenciaDelete">
+                            <input type="hidden" name="contacto_pk" value="{{ contacto.pk }}">
+                            <button type="submit" class="btn btn-danger waves-effect"><i class="zmdi zmdi-delete"></i></button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr id="emptyList">
+                <td colspan="4">Sin contactos de emergencia</td>
+            </tr>
+        {% endfor %}
+        {% if perms.escuela.add_contactoemergencia %}
+            <tr>
+                <td colspan="4"><h3>Agregar contacto de emergencia</h3></td>
+            </tr>
+            <tr>
+                <form action="{% url 'escuela:alumno-detail' alumno.pk 'contactos_emergencia' %}" id="agregarContactoEmergenciaForm" method="post">
+                    <input type="hidden" name="accion" value="contactoEmergenciaAdd">
+                    {% csrf_token %}
+                    <td>
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                {{ form_contacto.nombre }}
+                                <label class="fg-label">{{ form_contacto.nombre.label }}</label>
+                            </div>
+                            {% if form_contacto.nombre.errors %}
+                                <small class="help-block">{{ form_contacto.nombre.errors }}</small>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                {{ form_contacto.telefono }}
+                                <label class="fg-label">{{ form_contacto.telefono.label }}</label>
+                            </div>
+                            {% if form_contacto.telefono.errors %}
+                                <small class="help-block">{{ form_contacto.telefono.errors }}</small>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group fg-float">
+                            <div class="fg-line">
+                                {{ form_contacto.direccion }}
+                                <label class="fg-label">{{ form_contacto.direccion.label }}</label>
+                            </div>
+                            {% if form_contacto.direccion.errors %}
+                                <small class="help-block">{{ form_contacto.direccion.errors }}</small>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn palette-Teal bg waves-effect">Agregar</button>
+                    </td>
+                </form>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>

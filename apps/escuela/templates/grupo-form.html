@@ -1,0 +1,133 @@
+{% extends 'base_template.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'template/vendors/bower_components/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+        </div>
+
+
+        <div class="card-body card-padding">
+            {% if object %}
+                <div class="row">
+                    <div class="">
+                        <a href="{% url 'escuela:grupos-horario' object.pk %}?next={{ request.path }}" class="btn btn-warning pull-right">Editar horario</a>
+                    </div>
+                </div>
+            {% endif %}
+            <form role="form" class="form-horizontal" method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.periodo.label }}</p>
+                        {{ form.periodo }}
+                    </div>
+                    {% if form.periodo.errors %}
+                        <small class="help-block">{{ form.periodo.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.campus.label }}</p>
+                        {{ form.campus }}
+                    </div>
+                    {% if form.campus.errors %}
+                        <small class="help-block">{{ form.campus.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.nivel.label }}</p>
+                        {{ form.nivel }}
+                    </div>
+                    {% if form.nivel.errors %}
+                        <small class="help-block">{{ form.nivel.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.grupo }}
+                        <label class="fg-label">{{ form.grupo.label }}</label>
+                    </div>
+                    {% if form.grupo.errors %}
+                        <small class="help-block">{{ form.grupo.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.docente.label }}</p>
+                        {{ form.docente }}
+                    </div>
+                    {% if form.docente.errors %}
+                        <small class="help-block">{{ form.docente.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.supervisor.label }}</p>
+                        {{ form.supervisor }}
+                    </div>
+                    {% if form.supervisor.errors %}
+                        <small class="help-block">{{ form.supervisor.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.alumnos.label }}</p>
+                        {{ form.alumnos }}
+                    </div>
+                    {% if form.alumnos.errors %}
+                        <small class="help-block">{{ form.alumnos.errors }}</small>
+                    {% endif %}
+                </div>
+
+{#                <div class="form-group fg-float">#}
+{#                    <div class="">#}
+{#                        <p class="f-500 m-b-15">{{ form.dias.label }}</p>#}
+{#                        {{ form.dias }}#}
+{#                    </div>#}
+{#                    {% if form.dias.errors %}#}
+{#                        <small class="help-block">{{ form.dias.errors }}</small>#}
+{#                    {% endif %}#}
+{#                </div>#}
+
+
+{#                <div class="form-group">#}
+{#                    <span class="input-group-addon"><i class="zmdi zmdi-time"></i></span>#}
+{#                        <div class="dtp-container fg-line">#}
+{#                        <input name="time-picker" type='text' class="form-control time-picker" placeholder="Click here...">#}
+{#                    </div>#}
+{#                </div>#}
+
+
+
+                <div class="form-group fg-float">
+                    <div class="col-sm-6">
+                        <a href="{{ cancel_url }}" class="btn btn-default btn-lg m-t-10 pull-left">Cancelar</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn btn-primary btn-lg m-t-10 pull-right">Agregar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'template/vendors/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js' %}"></script>
+    <script>
+
+    </script>
+{% endblock %}

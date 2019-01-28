@@ -1,0 +1,130 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body card-padding">
+
+            {% if alumno.archivo %}
+                <div class="alert alert-warning">
+                    <p>
+                        Este alumno esta archivado
+                        {% if perms.escuela.delete_alumno %}
+                            <a href="{% url 'archivo:alumnos-archivar' alumno.pk %}" class="btn btn-danger btn-sm m-l-10">Desarchivar</a>
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+
+            <ul class="tab-nav tn-justified tn-icon" role="tablist">
+                <li role="presentation" class="{% ifequal 'informacion_personal' pestana %}active{% endifequal %}">
+                    <a class="col-sx-4" href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab">
+                        Información del alumno
+                    </a>
+                </li>
+                <li role="presentation" class="{% ifequal 'contactos_emergencia' pestana %}active{% endifequal %}">
+                    <a class="col-xs-4" href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">
+                        Contactos de emergencia
+                    </a>
+                </li>
+                <li role="presentation" class="{% ifequal 'notas' pestana %}active{% endifequal %}">
+                    <a class="col-xs-4" href="#tab-3" aria-controls="tab-3" role="tab" data-toggle="tab">
+                        Notas
+                    </a>
+                </li>
+            </ul>
+
+
+
+            <div class="tab-content p-20">
+                <div role="tabpanel" class="tab-pane animated fadeIn in {% ifequal 'informacion_personal' pestana %}active{% endifequal %}" id="tab-1">
+                    {% include 'alumno-informacion-personal.html' %}
+                </div>
+
+                <div role="tabpanel" class="tab-pane animated fadeIn {% ifequal 'contactos_emergencia' pestana %}active{% endifequal %}" id="tab-2">
+                    {% include 'alumno-contactos-emergencia.html' %}
+                </div>
+
+                <div role="tabpanel" class="tab-pane animated fadeIn {% ifequal 'notas' pestana %}active{% endifequal %}" id="tab-3">
+                    {% include 'alumno-notas.html' %}
+                </div>
+
+
+                {% if not alumno.archivo and perms.escuela.delete_alumno %}
+                    <div class="text-center row m-t-15">
+                        <div class="col-xs-12">
+                            <a href="{% url 'archivo:alumnos-archivar' alumno.pk %}" class="btn btn-danger btn-lg">
+                                Archivar alumno
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        axios.defaults.xsrfCookieName = 'csrftoken'
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+        $(function(){
+            $('#addNotaBtn').click(function(){
+
+                swal({
+                  title: "Agregar una Nota",
+                  text: "<div class=\"form-group\">"+
+                            "<div class=\"fg-line\">"+
+                                "<textarea id='nuevaNota' class=\"form-control\" rows=\"3\" placeholder=\"Escribe la nota del alumno aquí....\"></textarea>"+
+                            "</div>"+
+                        "</div>",
+                  //type: "warning",
+                  html: true,
+                  showCancelButton: true,
+                  confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Guardar",
+                  cancelButtonText: "Cancelar",
+                  closeOnConfirm: false,
+                  closeOnCancel: false
+                },
+                function(isConfirm){
+                  if (isConfirm) {
+                      axios.post('{% url "escuela:alumno-agregar-nota" alumno.pk %}', JSON.stringify({
+                        nota: $("#nuevaNota").val(),
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                      }), {
+                          headers:
+                              {'Content-Type':'application/x-www-form-urlencoded'}
+                      })
+                      .then(function (response) {
+                        console.log(response);
+                        if(response.data.success){
+                          swal("Éxito!", "Su nota ha sido guardada satisfactoriamente.", "success");
+                          swal({
+                              title: 'Éxito!',
+                              type: 'success',
+                              text: 'Su nota ha sido guardada satisfactoriamente.'
+                          }, function(){
+                              setTimeout(function () {
+                                window.location.href = response.data.success_url;
+                              }, 1000);
+                          });
+                        }else{
+                          swal("Cancelado", "Ocurrió un error al guardar la nota", "error");
+                        }
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                        swal("Cancelado", "Ocurrió un error en el servidor", "error");
+                      });
+
+                  } else {
+                    swal("Cancelado", "La nota se canceló", "error");
+                  }
+                });
+
+
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body card-padding">
+
+            {% if institucion.archivo %}
+                <div class="alert alert-warning">
+                    <p>
+                        Esta institución esta archivada
+                        {% if perms.escuela.delete_institucion %}
+                            <a href="{% url 'archivo:instituciones-archivar' institucion.pk %}" class="btn btn-danger btn-sm m-l-10">Desarchivar</a>
+                        {% endif %}
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="pmb-block col-sm-12 col-md-6">
+                    <div class="pmbb-header">
+                        <h2><i class="zmdi zmdi-local-store m-r-5"></i> Información de la institución</h2>
+                    </div>
+                    <div class="pmbb-body p-l-30">
+                        <div class="pmbb-view">
+                            <dl class="dl-horizontal">
+                                <dt>Nombre</dt>
+                                <dd>{{ object.nombre }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Dirección</dt>
+                                <dd>{{ object.direccion |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Referencia</dt>
+                                <dd>{{ object.referencia |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Teléfono</dt>
+                                <dd>{{ object.telefono |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Contacto directo</dt>
+                                <dd>{{ object.contacto_directo |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Contacto directo email</dt>
+                                <dd>{{ object.contacto_directo_email |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Responsable principal</dt>
+                                <dd>{{ object.responsable_principal |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Nivel</dt>
+                                <dd>{{ object.nivel |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Subnivel</dt>
+                                <dd>{{ object.subnivel |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Ámbito</dt>
+                                <dd>{{ object.ambito |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Sector</dt>
+                                <dd>{{ object.sector |default:'N/A' }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                {# Informacion grupos #}
+                <div class="pmb-block col-sm-12 col-md-6">
+                    <div class="pmbb-header">
+                        <h2><i class="zmdi zmdi-case m-r-5"></i> Proyectos</h2>
+                    </div>
+                    <div class="pmbb-body p-l-30">
+                        {% for proyecto in object.proyectos.all %}
+                            <div class="pmbb-view">
+                                <dl class="dl-horizontal">
+                                    <dt>Nombre</dt>
+                                    <dd><a href="{% url 'escuela:proyectos-detail' proyecto.pk %}">{{ proyecto.nombre }}</a></dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>Modalidad</dt>
+                                    <dd>{{ proyecto.modalidad }}</dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>Alumnos</dt>
+                                    <dd>
+                                        {% if proyecto.alumnos.count %}
+                                            <ul style="padding-left: 15px">
+                                                {% for alumno in proyecto.alumnos.all %}
+                                                    <li><a href="{% url 'escuela:alumno-detail' alumno.pk %}">{{ alumno.get_name_display }}</a></li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </dd>
+                                </dl>
+
+                            </div>
+                            {% if not forloop.last %}
+                                <hr>
+                            {% endif %}
+                            {% empty %}
+                            <div class="pmbb-view">
+                                <h4 class="center-align">Sin grupos agregados</h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div><!-- .row -->
+
+            {% if not institucion.archivo and perms.escuela.delete_institucion %}
+                <div class="text-center row m-t-15">
+                    <div class="col-xs-12">
+                        <a href="{% url 'archivo:instituciones-archivar' institucion.pk %}" class="btn btn-danger btn-lg">
+                            Archivar institución
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

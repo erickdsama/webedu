@@ -1,0 +1,317 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="card" id="profile-main">
+        <div class="pm-overview c-overflow">
+            <div class="pmo-pic">
+                <div class="p-relative">
+                    <a href="">
+                        <img class="img-responsive" src="{{ supervisor.usuario.get_image }}" alt="">
+                    </a>
+
+                    {% comment %}
+                    <div class="dropdown pmop-message">
+                        <a data-toggle="dropdown" href="" class="btn palette-White bg btn-float z-depth-1">
+                            <i class="zmdi zmdi-comment-text-alt"></i>
+                        </a>
+
+                        <div class="dropdown-menu">
+                            <textarea placeholder="Write something..."></textarea>
+
+                            <button class="btn bgm-green btn-float"><i class="zmdi zmdi-mail-send"></i></button>
+                        </div>
+                    </div>
+
+
+                    <a href="" class="pmop-edit">
+                        <i class="zmdi zmdi-camera"></i> <span class="hidden-xs">Update Profile Picture</span>
+                    </a>
+                    {% endcomment %}
+                </div>
+
+
+                <div class="pmo-stat">
+                    <h4 class="m-0 c-white">{{ supervisor.usuario.last_login |date:'SHORT_DATE_FORMAT' }}</h4>
+                    Último inicio de sesión
+                </div>
+            </div>
+
+            <div class="pmo-block pmo-contact hidden-xs">
+                <h2>Contacto</h2>
+
+                <ul>
+                    <li><i class="zmdi zmdi-phone"></i> {{ supervisor.telefono |default:'N/A' }}</li>
+                    <li><i class="zmdi zmdi-email"></i> {{ supervisor.usuario.email }}</li>
+{#                    <li><i class="zmdi zmdi-facebook-box"></i> malinda.hollaway</li>#}
+{#                    <li><i class="zmdi zmdi-twitter"></i> @malinda (twitter.com/malinda)</li>#}
+{#                    <li>#}
+{#                        <i class="zmdi zmdi-pin"></i>#}
+{#                        <address class="m-b-0 ng-binding">#}
+{#                            44-46 Morningside Road,<br>#}
+{#                            Edinburgh,<br>#}
+{#                            Scotland#}
+{#                        </address>#}
+{#                    </li>#}
+                </ul>
+            </div>
+
+            {% comment %}
+            <div class="pmo-block pmo-items hidden-xs">
+                <h2>Connections</h2>
+
+                <div class="pmob-body">
+                    <div class="row">
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/1.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/2.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/3.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/4.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/5.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/6.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/7.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/8.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/1.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/2.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/3.jpg" alt="">
+                        </a>
+                        <a href="" class="col-xs-2">
+                            <img class="img-circle" src="img/profile-pics/4.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endcomment %}
+        </div>
+
+        <div class="pm-body clearfix">
+{#            <ul class="tab-nav tn-justified">#}
+{#                <li class="active waves-effect"><a href="profile-about.html">Información</a></li>#}
+{#                <li class="waves-effect"><a href="profile-photos.html">Instituciones</a></li>#}
+{#                <li class="waves-effect"><a href="profile-connections.html">Grupos</a></li>#}
+{#            </ul>#}
+             <ul class="tab-nav tn-justified tn-icon" role="tablist">
+                <li role="presentation" class="active">
+                    <a class="col-sx-4" href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab">
+                        Información
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a class="col-xs-4" href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">
+                        Instituciones
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a class="col-xs-4" href="#tab-3" aria-controls="tab-3" role="tab" data-toggle="tab">
+                        Grupos
+                    </a>
+                </li>
+                <li role="presentation" class="">
+                    <a class="col-xs-4" href="#tab-4" aria-controls="tab-3" role="tab" data-toggle="tab">
+                        Alumnos
+                    </a>
+                </li>
+            </ul>
+
+            <div class="pmb-block tab-content">
+                <div role="tabpanel" class="tab-pane animated fadeIn in active" id="tab-1">
+                    <div class="pmbb-header">
+                        <h2><i class="zmdi zmdi-account m-r-5"></i> Información básica</h2>
+                    </div>
+                    <div class="pmbb-body p-l-30">
+                        <div class="pmbb-view">
+                            <dl class="dl-horizontal">
+                                <dt>Nombre completo</dt>
+                                <dd>{{ supervisor.usuario.get_full_name }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Teléfono</dt>
+                                <dd>{{ supervisor.telefono }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Turno</dt>
+                                <dd>{{ supervisor.turno |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Sector</dt>
+                                <dd>{{ supervisor.sector |default:'N/A' }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt># de instituciones</dt>
+                                <dd>{{ supervisor.get_instituciones.count }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt># de grupos</dt>
+                                <dd>{{ supervisor.grupos_periodo.count }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt># de alumnos</dt>
+                                <dd>{{ supervisor.get_alumnos.count }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane animated fadeIn in" id="tab-2">
+                    <div class="pmbb-header">
+                        <h2>Instituciones que supervisa</h2>
+                    </div>
+                    <div class="pmbb-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nombre</th>
+                                    <th>Contacto</th>
+                                    <th>Teléfono</th>
+                                    <th>Supervisores</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for institucion in supervisor.get_instituciones %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td><a href="{% url 'escuela:instituciones-detail' institucion.pk %}">{{ institucion.nombre }}</a></td>
+                                        <td>{{ institucion.contacto_directo |default:'N/A' }}</td>
+                                        <td>{{ institucion.telefono |default:'N/A' }}</td>
+                                        <td>
+                                            {% for sup in institucion.supervisores.all %}
+                                                <span class="label label-info">{{ sup.usuario.nombre }} {{ sup.usuario.apellido_paterno }}</span>
+                                                {% if not forloop.last %}
+                                                    <br>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% if institucion.status %}
+                                                <span class="c-green f-16">Activa</span>
+                                                {% else %}
+                                                <span class="c-red f-16">Inactiva</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6">No se encontraron instituciones</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane animated fadeIn in" id="tab-3">
+                    <div class="pmbb-header">
+                        <h2>Grupos que supervisa</h2>
+                    </div>
+                    <div class="pmbb-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Campus</th>
+                                    <th>Periodo</th>
+                                    <th>Grupo</th>
+                                    <th>Docente</th>
+                                    <th>Horario</th>
+                                    <th># A.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for grupo in supervisor.grupos_periodo %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ grupo.campus }}</td>
+                                        <td>{{ grupo.periodo }}</td>
+                                        <td><a href="{% url 'escuela:grupos-detail' grupo.pk %}">{{ grupo.grupo }}</a></td>
+                                        <td>{{ grupo.docente.get_full_name }}</td>
+                                        <td>
+                                            {% for dia in grupo.dias.all %}
+                                                {{ dia.dia }} {{ dia.hora_inicio }}-{{ dia.hora_fin }} <br>
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ grupo.alumnos.all.count }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7">No se encontraron grupos</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane animated fadeIn in" id="tab-4">
+                    <div class="pmbb-header">
+                        <h2>Alumnos que supervisa</h2>
+                    </div>
+                    <div class="pmbb-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Matrícula</th>
+                                    <th>Nombre</th>
+                                    <th>Nivel</th>
+                                    <th>Campus</th>
+                                    <th>Grupo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for alumno in supervisor.get_alumnos %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ alumno.matricula }}</td>
+                                        <td><a href="{% url 'escuela:alumno-detail' alumno.pk 'informacion_personal' %}">{{ alumno.nombre }}</a></td>
+                                        <td>{{ alumno.nivel }}</td>
+                                        <td>
+                                            {% if alumno.get_grupo %}
+                                                {{ alumno.get_grupo.campus }}
+                                                {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if alumno.get_grupo %}
+                                                <a href="{% url 'escuela:grupos-detail' alumno.get_grupo.pk %}">{{ alumno.get_grupo.grupo }}</a>
+                                                {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="6">No se encontraron alumnos</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

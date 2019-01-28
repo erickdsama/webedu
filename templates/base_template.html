@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ title_page|default:'Practicas Educación' }}</title>
+
+
+        <!-- Vendor CSS -->
+        <link href="{% static 'template/vendors/bower_components/fullcalendar/dist/fullcalendar.min.css' %}" rel="stylesheet">
+        <link href="{% static 'template/vendors/bower_components/animate.css/animate.min.css' %}" rel="stylesheet">
+        <link href="{% static 'template/vendors/bower_components/material-design-iconic-font/dist/css/material-design-iconic-font.min.css' %}" rel="stylesheet">
+        <link href="{% static 'template/vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css' %}" rel="stylesheet">
+        <link href="{% static 'template/vendors/bower_components/google-material-color/dist/palette.css' %}" rel="stylesheet">
+        <link href="{% static 'template/vendors/bower_components/bootstrap-select/dist/css/bootstrap-select.css' %}" rel="stylesheet">
+        <link href="{% static 'template/vendors/bower_components/bootstrap-sweetalert/lib/sweet-alert.css' %}" rel="stylesheet">
+
+        <!-- CSS -->
+        <link href="{% static 'template/css/app.min.1.css' %}" rel="stylesheet">
+        <link href="{% static 'template/css/app.min.2.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+        {% block extra_head %}
+
+        {% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+        {% block full_content %}
+            <body data-ma-header="teal">
+
+            {% include 'partials/header.html' %}
+
+            <section id="main">
+                <aside id="s-user-alerts" class="sidebar">
+                    <ul class="tab-nav tn-justified tn-icon m-t-10" data-tab-color="teal">
+{#                        <li><a class="sua-messages" href="#sua-messages" data-toggle="tab"><i class="zmdi zmdi-email"></i></a></li>#}
+                        <li><a class="sua-notifications" href="#sua-notifications" data-toggle="tab"><i class="zmdi zmdi-notifications"></i></a></li>
+{#                        <li><a class="sua-tasks" href="#sua-tasks" data-toggle="tab"><i class="zmdi zmdi-view-list-alt"></i></a></li>#}
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade" id="sua-notifications">
+                            <ul class="sua-menu list-inline list-unstyled palette-Orange bg">
+{#                                <li><a href=""><i class="zmdi zmdi-volume-off"></i> Mute</a></li>#}
+{#                                <li><a href=""><i class="zmdi zmdi-long-arrow-tab"></i> View all</a></li>#}
+                                <li><a href="" data-ma-action="sidebar-close"><i class="zmdi zmdi-close"></i> Cerrar</a></li>
+                            </ul>
+
+                            <div class="list-group lg-alt c-overflow" id="notificaciones-container">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </aside>
+
+                <aside id="s-main-menu" class="sidebar">
+                    <div class="smm-header">
+                        <i class="zmdi zmdi-long-arrow-left" data-ma-action="sidebar-close"></i>
+                    </div>
+
+                    <ul class="smm-alerts">
+{#                        <li data-user-alert="sua-messages" data-ma-action="sidebar-open" data-ma-target="user-alerts">#}
+{#                            <i class="zmdi zmdi-email"></i>#}
+{#                        </li>#}
+                        <li data-user-alert="sua-notifications" data-ma-action="sidebar-open" data-ma-target="user-alerts">
+                            <i class="zmdi zmdi-notifications"></i>
+                        </li>
+{#                        <li data-user-alert="sua-tasks" data-ma-action="sidebar-open" data-ma-target="user-alerts">#}
+{#                            <i class="zmdi zmdi-view-list-alt"></i>#}
+{#                        </li>#}
+                    </ul>
+
+                    <ul class="main-menu">
+                        {% for item in menu %}
+                            {% if not item.usuarios_permitidos or request.user.groups.first.name in item.usuarios_permitidos %}
+                                <li {% if item.active %}class="active"{% endif %}>
+                                    <a href="{{ item.url }}"><i class="zmdi {{ item.icono |default:'zmdi-format-underlined' }}"></i> {{ item.nombre }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        <li class="sub-menu">
+                            <a href data-ma-action="submenu-toggle">
+                                <i class="zmdi zmdi-archive"></i>
+                                Archivo
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="{% url 'archivo:alumnos-list' %}">
+                                        <i class="zmdi zmdi-folder-outline"></i>
+                                        Alumnos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'archivo:proyectos-list' %}">
+                                        <i class="zmdi zmdi-folder-outline"></i>
+                                        Proyectos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'archivo:instituciones-list' %}">
+                                        <i class="zmdi zmdi-folder-outline"></i>
+                                        Institutos
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </aside>
+
+                <section id="content">
+                    <div class="container">
+                        <div class="c-header">
+                            {% if title_page and subtitle_page %}
+                                <h2>{{ title_page }} <small>{{ subtitle_page }}</small></h2>
+                                {% elif title_page and not subtitle_page %}
+                                <h2>{{ title_page }} </h2>
+                            {% endif %}
+                        </div>
+
+                        {% block content %}
+
+                        {% endblock %}
+                    </div>
+                </div>
+            </section>
+
+
+            {% block footer %}
+{#                <footer id="footer">#}
+{#                    Copyright &copy; 2015 Material Admin#}
+{##}
+{#                    <ul class="f-menu">#}
+{#                        <li><a href="">Home</a></li>#}
+{#                        <li><a href="">Dashboard</a></li>#}
+{#                        <li><a href="">Reports</a></li>#}
+{#                        <li><a href="">Support</a></li>#}
+{#                        <li><a href="">Contact</a></li>#}
+{#                    </ul>#}
+{#                </footer>#}
+            {% endblock %}
+
+
+        </section>
+
+
+        {% block js_default %}
+            <!-- Javascript Libraries -->
+            <script src="{% static 'template/vendors/bower_components/jquery/dist/jquery.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/Waves/dist/waves.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bootstrap-growl/bootstrap-growl.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/moment/min/moment.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/fullcalendar/dist/fullcalendar.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/simpleWeather/jquery.simpleWeather.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/salvattore/dist/salvattore.min.js' %}"></script>
+
+            <script src="{% static 'template/vendors/bower_components/flot/jquery.flot.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/flot/jquery.flot.resize.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/flot.curvedlines/curvedLines.js' %}"></script>
+            <script src="{% static 'template/vendors/sparklines/jquery.sparkline.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js' %}"></script>
+            <script src="{% static 'template/js/flot-charts/curved-line-chart.js' %}"></script>
+            <script src="{% static 'template/js/flot-charts/line-chart.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/bootstrap-select/dist/js/bootstrap-select.js' %}"></script>
+
+
+            <!-- Placeholder for IE9 -->
+            <!--[if IE 9 ]>
+            <script src="{% static 'template/vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js' %}"></script>
+            <![endif]-->
+
+            <script src="{% static 'template/js/charts.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/chosen/chosen.jquery.min.js' %}"></script>
+            <script src="{% static 'template/vendors/bower_components/bootstrap-sweetalert/lib/sweet-alert.min.js' %}"></script>
+            <script src="{% static 'template/js/functions.js' %}"></script>
+            <script src="{% static 'template/js/actions.js' %}"></script>
+            <script src="{% static 'template/js/demo.js' %}"></script>
+
+            <script>
+            /*
+             * Notifications
+             */
+            function notify(type, message){
+                $.growl({
+{#                    icon: icon,#}
+                    title: '',
+                    message: message,
+                    url: ''
+                },{
+                    element: 'body',
+                    type: type,
+                    allow_dismiss: true,
+                    placement: {
+                        from: 'top',
+                        align: 'right'
+                    },
+                    offset: {
+                        x: 30,
+                        y: 30
+                    },
+                    spacing: 10,
+                    z_index: 1031,
+                    delay: 2500,
+                    timer: 1000,
+                    url_target: '_blank',
+                    mouse_over: false,
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    icon_type: 'class',
+                    template: '<div data-growl="container" class="alert" role="alert">' +
+                    '<button type="button" class="close" data-growl="dismiss">' +
+                    '<span aria-hidden="true">&times;</span>' +
+                    '<span class="sr-only">Close</span>' +
+                    '</button>' +
+                    '<span data-growl="message"></span>' +
+                    '<a href="#" data-growl="url"></a>' +
+                    '</div>'
+                });
+            };
+            </script>
+
+{#           Messages #}
+            <script>
+            $(function(){
+               {% for message in messages %}
+                    notify("{{ message.tags }}", "{{ message }}");
+               {% endfor %}
+            });
+            </script>
+
+            <script>
+                function displayBuscadorChoices(){
+                    $(".buscador-opciones").slideDown();
+
+                }
+
+                function hideBuscadorChoices(){
+                    $(".buscador-opciones").slideUp();
+                }
+
+                var buscadorChoices = [];
+
+                function agregarChoices(){
+                    var html = "";
+                    for (var i=0; i < buscadorChoices.length; i++){
+                        html += "<li><a href='"+buscadorChoices[i].url+"'>"+buscadorChoices[i].nombre+" <span class='palette-Grey-700 text pull-right m-r-25'>"+buscadorChoices[i].tipo+"</span></a></li>";
+                    }
+
+                    if (buscadorChoices.length == 0){
+                        html = "<li class='no-results'>No se encontraron resultados :(</li>";
+                    }
+
+                    $("ul#resultados-busqueda").html(html);
+                }
+
+                $(function(){
+                    $("input#buscador").on('focus', function(){
+                        $("input#buscador").on("keyup", function () {
+                            if($(this).val().length > 2){
+                                displayBuscadorChoices();
+                                $.post("{% url 'escuela:buscador' %}", {busqueda: $(this).val(), csrfmiddlewaretoken: "{{ csrf_token }}"})
+                                        .success(function (data) {
+                                            /*if(data.length > 0){
+                                                buscadorChoices = data;
+                                            }*/
+                                            buscadorChoices = data;
+                                            agregarChoices();
+                                        })
+                                        .error(function(){
+                                            console.log("Ocurrio un error en la peticion");
+                                        });
+                            }else{
+                                hideBuscadorChoices();
+                            }
+                        });
+                    });
+
+                    $("input#buscador").on('focusout', function(){
+                        hideBuscadorChoices();
+                    });
+                });
+            </script>
+        {% endblock %}
+
+        {# Get notificaciones #}
+        <script>
+
+            $(function() {
+                $.ajax({
+                    url: "{% url 'notificaciones:mis-notificaciones' %}",
+                    method: 'GET'
+                }).success(function(data){
+                    var notificaciones = JSON.parse(data);
+                    console.log(notificaciones);
+                    var notificaciones_list_html = '';
+                    for(var i=0; i<notificaciones.length; i++){
+                        if(!notificaciones[i].visto){
+                            var class_visto = ' no-visto';
+                        }else{
+                            var class_visto = '';
+                        }
+                        var html_string = '<a href="'+notificaciones[i].url+'" class="list-group-item media'+class_visto+'"><div class="pull-left">';
+                        if (notificaciones[i].imagen){
+                            html_string += '<img class="avatar-img" src="'+notificaciones[i].imagen+'" alt="">';
+                        }
+                        html_string += '</div><div class="media-body">';
+                        if (notificaciones[i].usuario_creo){
+                            html_string += '<div class="lgi-heading">'+notificaciones[i].usuario_creo+'</div>';
+                        }else{
+                            html_string += '<div class="lgi-heading">Sistema</div>';
+                        }
+                        html_string += '<small class="lgi-text">'+notificaciones[i].texto+'</small></div></a>';
+                        notificaciones_list_html += html_string;
+                    }
+                    $("#notificaciones-container").html(notificaciones_list_html);
+
+                }).error(function(err){
+                    console.log(err);
+                });
+            });
+
+        </script>
+
+
+        {% block js %}
+
+        {% endblock %}
+        </body>
+    {% endblock %}
+</html>

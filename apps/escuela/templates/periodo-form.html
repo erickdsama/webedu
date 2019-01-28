@@ -1,0 +1,59 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+        </div>
+
+        <div class="card-body card-padding">
+            <form role="form" class="form-horizontal" method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.ano.label }}</p>
+                        {{ form.ano }}
+                    </div>
+                    {% if form.ano.errors %}
+                        <small class="help-block">{{ form.ano.errors }}</small>
+                    {% endif %}
+                </div>
+
+            <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.semestre.label }}</p>
+                        {{ form.semestre }}
+                    </div>
+                    {% if form.semestre.errors %}
+                        <small class="help-block">{{ form.semestre.errors }}</small>
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group fg-float">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            {{ form.activo }}
+                            <i class="input-helper"></i>
+                            {{ form.activo.label }}
+                        </label>
+                    </div>
+                    {% if form.activo.errors %}
+                        <small class="help-block">{{ form.activo.errors }}</small>
+                    {% endif %}
+                </div>
+
+
+
+                <div class="form-group fg-float">
+                    <div class="col-sm-6">
+                        <a href="{% url 'escuela:periodos-list' %}" class="btn btn-default btn-lg m-t-10 pull-left">Cancelar</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn btn-primary btn-lg m-t-10 pull-right">Agregar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+
+        </div>
+
+        <div class="card-body card-padding">
+            <div class="row">
+                <div class="">
+                    <a href="{% url 'usuarios:user-set-password' object.pk %}?next={{ request.path }}" class="btn btn-warning pull-right">Cambiar contraseña</a>
+                </div>
+            </div>
+            <form role="form" class="form-horizontal" method="post" novalidate>
+                {% csrf_token %}
+                <div class="non-field-errors">
+                    {% if form.non_field_errors %}
+                        <small class="help-block">{{ form.non_field_errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.nombre }}
+                        <label class="fg-label">{{ form.nombre.label }}</label>
+                    </div>
+                    {% if form.nombre.errors %}
+                        <small class="help-block">{{ form.nombre.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.apellido_paterno }}
+                        <label class="fg-label">{{ form.apellido_paterno.label }}</label>
+                    </div>
+                    {% if form.apellido_paterno.errors %}
+                        <small class="help-block">{{ form.apellido_paterno.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.apellido_materno }}
+                        <label class="fg-label">{{ form.apellido_materno.label }}</label>
+                    </div>
+                    {% if form.apellido_materno.errors %}
+                        <small class="help-block">{{ form.apellido_materno.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.email }}
+                        <label class="fg-label">{{ form.email.label }}</label>
+                    </div>
+                    {% if form.email.errors %}
+                        <small class="help-block">{{ form.email.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.telefono }}
+                        <label class="fg-label">{{ form.telefono.label }}</label>
+                    </div>
+                    {% if form.telefono.errors %}
+                        <small class="help-block">{{ form.telefono.errors }}</small>
+                    {% endif %}
+                </div>
+{#                <div class="form-group fg-float">#}
+{#                    <div class="fg-line">#}
+{#                        {{ form.password }}#}
+{#                        <label class="fg-label">{{ form.password.label }}</label>#}
+{#                    </div>#}
+{#                    {% if form.password.errors %}#}
+{#                        <small class="help-block">{{ form.password.errors }}</small>#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#                <div class="form-group fg-float">#}
+{#                    <div class="fg-line">#}
+{#                        {{ form.password2 }}#}
+{#                        <label class="fg-label">{{ form.password2.label }}</label>#}
+{#                    </div>#}
+{#                    {% if form.password2.errors %}#}
+{#                        <small class="help-block">{{ form.password2.errors }}</small>#}
+{#                    {% endif %}#}
+{#                </div>#}
+                <div class="form-group fg-float">
+                    <div class="checkbox m-b-15">
+                        <label>
+                            {{ form.is_active }}
+                            <i class="input-helper"></i>
+                            {{ form.is_active.label }}
+                        </label>
+                    </div>
+                    {% if form.is_active.errors %}
+                        <small class="help-block">{{ form.is_active.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                        <div class="">
+                            <p class="f-500 m-b-15">{{ form.tipo_usuario.label }}</p>
+                            {{ form.tipo_usuario }}
+                        </div>
+                        {% if form.tipo_usuario.errors %}
+                            <small class="help-block">{{ form.tipo_usuario.errors }}</small>
+                        {% endif %}
+                    </div>
+
+                <div id="showSupervisor">
+
+                    <div class="form-group fg-float">
+                        <div class="">
+                            <p class="f-500 m-b-15">{{ form.turno.label }}</p>
+                            {{ form.turno }}
+                        </div>
+                        {% if form.turno.errors %}
+                            <small class="help-block">{{ form.turno.errors }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group fg-float">
+                        <div class="fg-line">
+                            {{ form.sector }}
+                            <label class="fg-label">{{ form.sector.label }}</label>
+                        </div>
+                        {% if form.sector.errors %}
+                            <small class="help-block">{{ form.sector.errors }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+
+
+                <div class="form-group fg-float">
+                    <div class="col-sm-6">
+                        <a href="{% url 'usuarios:user-list' %}" class="btn btn-default btn-lg m-t-10 pull-left">Cancelar</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn btn-primary btn-lg m-t-10 pull-right">Agregar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+    var supervisor_group_id = "{{ supervisor_group }}";
+    function showSupervisorForm(){
+        $("#showSupervisor").show();
+    }
+    function hideSupervisorForm(){
+        $("#showSupervisor").hide();
+    }
+
+    $(function () {
+        $("select[name='tipo_usuario']").on("change", function(){
+            if ($(this).val() != null && $(this).val().indexOf(supervisor_group_id) > -1) showSupervisorForm();
+            else hideSupervisorForm();
+        });
+
+        if($("select[name='tipo_usuario']").val() != null && $("select[name='tipo_usuario']").val().indexOf(supervisor_group_id) > -1) showSupervisorForm();
+        else hideSupervisorForm();
+    });
+
+    </script>
+{% endblock %}

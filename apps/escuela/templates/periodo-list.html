@@ -1,0 +1,52 @@
+{% extends 'base_template.html' %}
+{% block content %}
+    <div class="card card-main">
+        {% if perms.escuela.add_periodo %}
+            <a href="{% url 'escuela:periodos-create' %}" class="btn btn-float btn-danger m-btn waves-effect waves-circle waves-float"><i class="zmdi zmdi-plus"></i></a>
+        {% endif %}
+        <div class="list-group">
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Año</th>
+                            <th>Semestre</th>
+                            <th>Activo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for periodo in object_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td class="center-align">{{ periodo.ano}}</td>
+                                <td>{{ periodo.semestre }}</td>
+                                <td>
+                                    {% if periodo.activo %}
+                                        <i class="zmdi zmdi-check-circle zmdi-hc-fw"></i>
+                                        {% else %}
+                                        <i class="zmdi zmdi-circle-o zmdi-hc-fw"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-eye"></i></button>
+                                    {% if perms.escuela.change_periodo %}
+                                        <button class="btn btn-warning btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-edit"></i></button>
+                                    {% endif %}
+                                    {% if perms.escuela.delete_periodo %}
+                                        <button class="btn btn-danger btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-delete"></i></button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="center-align">No se encontraron periodos</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

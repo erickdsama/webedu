@@ -1,0 +1,121 @@
+{% extends "base_template.html" %}
+{% load static %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+{#            <h2>Basic Example <small>Individual form controls automatically receive some global styling. All textual 'input', 'textarea', and 'select' elements with .form-control are set to width: 100%; by default. Wrap labels and controls in .form-group for optimum spacing.#}
+{#            </small></h2>#}
+        </div>
+
+        <div class="card-body card-padding">
+            <form role="form" class="form-horizontal" method="post" novalidate>
+                {% csrf_token %}
+                <div class="non-field-errors">
+                    {% if form.non_field_errors %}
+                        <small class="help-block">{{ form.non_field_errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.nombre }}
+                        <label class="fg-label">{{ form.nombre.label }}</label>
+                    </div>
+                    {% if form.nombre.errors %}
+                        <small class="help-block">{{ form.nombre.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.matricula }}
+                        <label class="fg-label">{{ form.matricula.label }}</label>
+                    </div>
+                    {% if form.matricula.errors %}
+                        <small class="help-block">{{ form.matricula.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.email }}
+                        <label class="fg-label">{{ form.email.label }}</label>
+                    </div>
+                    {% if form.email.errors %}
+                        <small class="help-block">{{ form.email.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.telefono }}
+                        <label class="fg-label">{{ form.telefono.label }}</label>
+                    </div>
+                    {% if form.telefono.errors %}
+                        <small class="help-block">{{ form.telefono.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.telefono2 }}
+                        <label class="fg-label">{{ form.telefono2.label }}</label>
+                    </div>
+                    {% if form.telefono2.errors %}
+                        <small class="help-block">{{ form.telefono2.errors }}</small>
+                    {% endif %}
+                </div>
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.no_servicio_medico }}
+                        <label class="fg-label">{{ form.no_servicio_medico.label }}</label>
+                    </div>
+                    {% if form.no_servicio_medico.errors %}
+                        <small class="help-block">{{ form.no_servicio_medico.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.tipo_seguro.label }}</p>
+                        {{ form.tipo_seguro }}
+                    </div>
+                    {% if form.tipo_seguro.errors %}
+                        <small class="help-block">{{ form.tipo_seguro.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.nivel.label }}</p>
+                        {{ form.nivel }}
+                    </div>
+                    {% if form.nivel.errors %}
+                        <small class="help-block">{{ form.nivel.errors }}</small>
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group fg-float">
+                    <div class="checkbox">
+                        <label>
+                            {{ form.activo }}
+                            <i class="input-helper"></i>
+                            Activo
+                        </label>
+                    </div>
+                    {% if form.activo.errors %}
+                        <small class="help-block">{{ form.activo.errors }}</small>
+                    {% endif %}
+                </div>
+
+
+                <div class="form-group fg-float">
+                    <div class="col-sm-6">
+                        <a href="{% url 'escuela:alumnos-list' %}" class="btn btn-default btn-lg m-t-10 pull-left">Cancelar</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn btn-primary btn-lg m-t-10 pull-right">Agregar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,113 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+        </div>
+
+        <div class="card-body card-padding">
+            <form role="form" class="form-horizontal" method="post" novalidate>
+                {% csrf_token %}
+                 <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.nombre }}
+                        <label class="fg-label">{{ form.nombre.label }}</label>
+                    </div>
+                    {% if form.nombre.errors %}
+                        <small class="help-block">{{ form.nombre.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.alumnos.label }}</p>
+                        {{ form.alumnos }}
+                    </div>
+                    {% if form.alumnos.errors %}
+                        <small class="help-block">{{ form.alumnos.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.modalidad.label }}</p>
+                        {{ form.modalidad }}
+                    </div>
+                    {% if form.modalidad.errors %}
+                        <small class="help-block">{{ form.modalidad.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.institucion.label }}</p>
+                        {{ form.institucion }}
+                    </div>
+                    {% if form.institucion.errors %}
+                        <small class="help-block">{{ form.institucion.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.espacio }}
+                        <label class="fg-label">{{ form.espacio.label }}</label>
+                    </div>
+                    {% if form.espacio.errors %}
+                        <small class="help-block">{{ form.espacio.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="">
+                        <p class="f-500 m-b-15">{{ form.tipo.label }}</p>
+                        {{ form.tipo }}
+                    </div>
+                    {% if form.tipo.errors %}
+                        <small class="help-block">{{ form.tipo.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.beneficiarios }}
+                        <label class="fg-label">{{ form.beneficiarios.label }}</label>
+                    </div>
+                    {% if form.beneficiarios.errors %}
+                        <small class="help-block">{{ form.beneficiarios.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.beneficiarios_cantidad }}
+                        <label class="fg-label">{{ form.beneficiarios_cantidad.label }}</label>
+                    </div>
+                    {% if form.beneficiarios_cantidad.errors %}
+                        <small class="help-block">{{ form.beneficiarios_cantidad.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="fg-line">
+                        {{ form.actividades }}
+                        <label class="fg-label">{{ form.actividades.label }}</label>
+                    </div>
+                    {% if form.actividades.errors %}
+                        <small class="help-block">{{ form.actividades.errors }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group fg-float">
+                    <div class="col-sm-6">
+                        <a href="{{ cancel_url }}" class="btn btn-default btn-lg m-t-10 pull-left">Cancelar</a>
+                    </div>
+                    <div class="col-sm-6">
+                        <button type="submit" class="btn btn-primary btn-lg m-t-10 pull-right">Agregar</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

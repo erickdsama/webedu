@@ -1,0 +1,73 @@
+{% extends 'base_template.html' %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body card-padding">
+            <div class="row">
+                {# Informacion basica #}
+                <div class="pmb-block col-sm-12 col-md-6">
+                    <div class="pmbb-header">
+                        <h2><i class="zmdi zmdi-account m-r-5"></i> Información Básica</h2>
+                    </div>
+                    <div class="pmbb-body p-l-30">
+                        <div class="pmbb-view">
+                            <dl class="dl-horizontal">
+                                <dt>Nombre completo</dt>
+                                <dd>{{ object.get_full_name }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Email</dt>
+                                <dd>{{ object.email }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Teléfono</dt>
+                                <dd>{{ object.telefono }}</dd>
+                            </dl>
+                            <dl class="dl-horizontal">
+                                <dt>Status</dt>
+                                <dd>{{ object.is_active |yesno:"Activo,Inactivo" }}</dd>
+                            </dl>
+
+                        </div>
+                    </div>
+                </div>
+
+                {# Informacion grupos #}
+                <div class="pmb-block col-sm-12 col-md-6">
+                    <div class="pmbb-header">
+                        <h2><i class="zmdi zmdi-device-hub m-r-5"></i> Grupos</h2>
+                    </div>
+                    <div class="pmbb-body p-l-30">
+                        {% for grupo in object.grupos.all %}
+                            <div class="pmbb-view">
+                                <dl class="dl-horizontal">
+                                    <dt>Periodo</dt>
+                                    <dd>{{ grupo.periodo.get_semestre_display }} {{ grupo.periodo.ano }} </dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>Nivel</dt>
+                                    <dd>{{ grupo.nivel }}</dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>Grupo</dt>
+                                    <dd><a href="{% url 'escuela:grupos-detail' grupo.pk %}">{{ grupo.grupo }}</a></dd>
+                                </dl>
+                                <dl class="dl-horizontal">
+                                    <dt>Docente</dt>
+                                    <dd>{{ grupo.docente.get_full_name }}</dd>
+                                </dl>
+                            </div>
+                            {% if not forloop.last %}
+                                <hr>
+                            {% endif %}
+                            {% empty %}
+                            <div class="pmbb-view">
+                                <h4 class="center-align">Sin grupos agregados</h4>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div><!-- .row -->
+        </div>
+    </div>
+{% endblock %}

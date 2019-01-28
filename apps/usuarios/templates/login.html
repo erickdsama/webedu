@@ -1,0 +1,66 @@
+{% extends 'base_template.html' %}
+{% load static %}
+
+{% block full_content %}
+    <body>
+        <div class="login" data-lbg="teal">
+            <!-- Login -->
+            <div class="l-block toggled" id="l-login">
+                    <div class="lb-header palette-Teal bg">
+                        <div class="row">
+                            <div class="col-xs-4 p-t-15">
+                                <img src="{% static 'img/practicas-edu.jpg' %}" alt="" width="100">
+                            </div>
+                            <div class="col-xs-8">
+                                <h3 class="text-center palette-White-500 text">SIPEP</h3>
+                                <div class="text-center"><small class="palette-White-500 text">Sistema de Prácticas Educativas Profesionales</small></div>
+                            </div>
+                        </div>
+                    </div>
+{#                    <div class="lb-header palette-Teal bg">#}
+{#                        <i class="zmdi zmdi-account-circle"></i>#}
+{#                        Hola! Por favor inicia sesión#}
+{#                    </div>#}
+
+                    <form action="" method="post" novalidate>
+                        {% csrf_token %}
+                        <div class="lb-body">
+                            <div class="form-group fg-float {% if form.email.errors %}has-error{% endif %}">
+                                <div class="fg-line">
+                                    {{ form.email }}
+                                    <label class="fg-label">Email</label>
+                                </div>
+                                {% if form.email.errors %}
+                                    <small class="help-block">{{ form.email.errors }}</small>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group fg-float {% if form.password.errors %}has-error{% endif %}">
+                                <div class="fg-line">
+                                    {{ form.password }}
+                                    <label class="fg-label">Contraseña</label>
+                                </div>
+                                {% if form.password.errors %}
+                                    <small class="help-block">{{ form.password.errors }}</small>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group">
+                                {{ form.non_field_errors }}
+                            </div>
+
+                            <button class="btn palette-Teal bg">Ingresar</button>
+
+                            <div class="m-t-20">
+{#                                <a data-block="#l-register" data-bg="blue" class="palette-Teal text d-block m-b-5" href="">Creat an account</a>#}
+                                <a data-block="#l-forget-password" data-bg="purple" href="" class="palette-Teal text">¿Olvidaste tu contraseña?</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+        </div>
+        {% block js_default %}
+            {{ block.super }}
+        {% endblock %}
+    </body>
+{% endblock %}

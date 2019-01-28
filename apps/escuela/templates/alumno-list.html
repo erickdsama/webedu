@@ -1,0 +1,178 @@
+{% extends 'base_template.html' %}
+{% load static %}
+{% block extra_head %}
+<link href="{% static 'template/vendors/bootgrid/jquery.bootgrid.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    {% if perms.escuela.add_alumno %}
+        <a href="{% url 'escuela:alumno-create' %}" class="btn btn-float btn-danger m-btn waves-effect waves-circle waves-float"><i class="zmdi zmdi-plus"></i></a>
+    {% endif %}
+    <div class="card card-main">
+
+        <div class="list-group">
+            <div class="card-body table-responsive">
+                <div class="form-filtros p-b-0 p-t-20 p-r-20 p-l-20">
+                    <form class="row" role="form" id="formFiltros">
+                        <div class="col-sm-3">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.buscar }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.nivel }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.campus }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group fg-line">
+                                {{ filtrosForm.institucion }}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group fg-line">
+                                {% if filtrosPaginacion %}
+                                    <a href="{% url 'escuela:alumnos-list' %}?{{ filtrosPaginacion }}&export=true" id="btnExport" class="btn palette-Teal bg waves-effect">Exportar</a>
+                                {% else %}
+                                    <a href="{% url 'escuela:alumnos-list' %}?export=true" id="btnExport" class="btn palette-Teal bg waves-effect">Exportar</a>
+                                {% endif %}
+
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+                <table id="data-table-basic" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Matrícula</th>
+                            <th>Nombre</th>
+                            <th>Campus</th>
+                            <th>Nivel</th>
+                            <th>Grupo</th>
+                            <th>Activo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alumno in object_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ alumno.matricula }}</td>
+                                <td>{{ alumno.get_full_name }}</td>
+                                <td>
+                                    {% if alumno.get_grupo %}
+                                        {{ alumno.get_grupo.campus }}
+                                        {% else %}
+                                        N/A
+                                    {% endif %}
+                                </td>
+                                <td>{{ alumno.get_nivel_display }}</td>
+                                <td>{{ alumno.get_grupo |default:"N/A" }}</td>
+                                <td>
+                                    {% if alumno.activo %}
+                                        <span class="c-green f-16">Activo</span>
+                                        {% else %}
+                                        <span class="c-red f-16">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'escuela:alumno-detail' alumno.pk %}" class="btn btn-info btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-eye"></i></a>
+                                    {% if perms.escuela.change_alumno %}
+                                        <a href="{% url 'escuela:alumno-update' alumno.pk %}" class="btn btn-warning btn-icon waves-effect waves-circle waves-float"><i class="zmdi zmdi-edit"></i></a>
+                                    {% endif %}
+                                    {% if perms.escuela.delete_alumno %}
+                                        <button data-delete-url="{% url 'escuela:alumno-delete' alumno.pk %}" class="btn btn-danger btn-icon waves-effect waves-circle waves-float sa-warning"><i class="zmdi zmdi-delete"></i></button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="8" class="center-align">No se encontraron alumnos</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+{#                 Paginacion#}
+                <ul class="pagination lg-pagination">
+                    {% if page_obj.has_previous %}
+                        <li>
+                            <a href="?pagina={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                                <i class="zmdi zmdi-chevron-left"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% for page in paginator.page_range %}
+                        {% if page == page_obj.number %}
+                            <li class="active"><a href="">{{ page }}</a></li>
+                            {% else %}
+                            <li class=""><a href="?pagina={{ page }}&{{ filtrosPaginacion }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li>
+                            <a href="?pagina={{ page_obj.next_page_number }}" aria-label="Siguiente">
+                                <i class="zmdi zmdi-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <p class="p-l-25">Total de alumnos: {{ paginator.count }}</p>
+            </div>
+        </div>
+    </div>
+
+    <form action="" id="eliminarAlumno" method="post">
+        {% csrf_token %}
+    </form>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'template/vendors/bower_components/Waves/dist/waves.min.js' %}"></script>
+    <script src="{% static 'template/vendors/bootstrap-growl/bootstrap-growl.min.js' %}"></script>
+    <script src="{% static 'template/vendors/bootgrid/jquery.bootgrid.updated.min.js' %}"></script>
+    <!-- Data Table -->
+    <script>
+        $('.sa-warning').click(function(){
+            var urlDelete = $(this).attr("data-delete-url");
+            swal({
+                title: "Estás seguro?",
+                text: "Al eliminar un alumno también se eliminará toda la infromación relacionada.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#f44336",
+                confirmButtonText: "Si, eliminar!",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false
+            }, function(){
+                $("form#eliminarAlumno").attr('action', urlDelete).submit();
+{#                swal("Exito!", "Se eliminó el alumno.", "success");#}
+            });
+        });
+
+        $(function () {
+            $('form#formFiltros select, form#formFiltros input').on('change', function () {
+
+                $("#formFiltros").submit();
+            });
+
+            /*$('#btnExport').on('click', function(){
+               var serialize_data = $("#formFiltros").serialize();
+               $('input[name="export"]').val(true);
+               $("#formFiltros").submit();
+               $('input[name="export"]').val();
+            });*/
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,71 @@
+body{
+    font-family: Helvetica, Arial;
+}
+
+ul.errorlist{
+    color: red;
+    list-style: none;
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+.card-main{
+    /*min-height: 500px;*/
+}
+
+#buscadorWrapper .buscador-opciones{
+    position: absolute;
+    background: white;
+    width: 100%;
+    max-height: 500px;
+    overflow: auto;
+}
+
+#buscadorWrapper .buscador-opciones a{
+    color: #666;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 25px;
+    display: block;
+    font-size: 14px;
+    transition: 500ms;
+}
+
+#buscadorWrapper .buscador-opciones a:hover{
+    background: #3FB0A6;
+    color: white;
+}
+
+header .media-body.h-search {
+    overflow: inherit;
+}
+
+#buscadorWrapper .buscador-opciones ul{
+    list-style: none;
+    padding-left: 0px;
+    /*padding-top: 15px;*/
+}
+
+#buscadorWrapper .buscador-opciones ul li.no-results{
+    font-size: 16px;
+    display: block;
+    text-align: center;
+}
+
+/* NOTAS*/
+.nota-wrap {
+    min-height: 80px;
+    margin-bottom: 15px;
+}
+
+.nota-cont {
+    /*padding: 10px;*/
+}
+.nota-time {
+    font-size: .8em;
+    text-align: right;
+}
+
+body #notificaciones-container .list-group-item.no-visto {
+    background-color: rgba(0, 0, 0, 0.08);
+}

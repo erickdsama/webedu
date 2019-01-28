@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <style>
+            body{
+                width: 100%;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+            .full-container{
+                margin-left: auto;
+                margin-right: auto;
+                width: 70%;
+            }
+            .header{
+                background-color: #009688;
+                color: #FFFFFF;
+                height: 100px;
+                text-align: center;
+            }
+            .header .nombre-sistema{
+                padding-top: 10px;
+            }
+            .container{
+                color: #474747;
+                background-color: white;
+                font-size: 16px;
+                line-height: 23px;
+                padding: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="full-container">
+            <div class="header">
+{#                <div class="col practicas-logo">#}
+{#                    <img src="http://practicaseducativasuacj.com/static/img/practicas-edu.jpg" alt="" class="header-image" width="200">#}
+{#                </div>#}
+                <div class="col nombre-sistema">
+                    <h2>SIPEP</h2>
+                    <h3>Sistema de Prácticas Educativas Profesionales</h3>
+                </div>
+{#                <div class="col educacion-logo">#}
+{#                    <img src="http://practicaseducativasuacj.com/static/img/practicas-edu.jpg" alt="" class="header-image" width="200">#}
+{#                </div>#}
+            </div>
+            <div class="container">
+                {% block container %}
+                {% endblock %}
+            </div>
+            <div class="footer"></div>
+        </div>
+    </body>
+</html>
