@@ -722,7 +722,7 @@ $(document).ready(function(){
             }
         );
         e.preventDefault();
-        var request = $.ajax({url:"http://127.0.0.1:8000/escuela/cambiar-periodo/", method:"POST", data:{id: id}}, function(){
+        var request = $.ajax({url:"http://practicaseducativasuacj.com/escuela/cambiar-periodo/", method:"POST", data:{id: id}}, function(){
 
 
         });
