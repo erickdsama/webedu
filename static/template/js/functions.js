@@ -18,7 +18,21 @@ $(window).load(function () {
         }
     }
 })
-
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 $(document).ready(function(){
 
     /* --------------------------------------------------------
@@ -694,6 +708,30 @@ $(document).ready(function(){
         });
 
     }
+
+    console.log("si ?");
+
+    $("#periodo__select").on("change", function(e) {
+        var id = this.value;
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup(
+            {
+                beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        );
+        e.preventDefault();
+        var request = $.ajax({url:"http://127.0.0.1:8000/escuela/cambiar-periodo/", method:"POST", data:{id: id}}, function(){
+
+
+        });
+
+        request.done(function(){
+            console.log("aqui?")
+            location.reload();
+        })
+    });
 
     /*
      * Skin Change

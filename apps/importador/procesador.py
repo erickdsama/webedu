@@ -17,15 +17,15 @@ class ProcesadorAlumnos(object):
         wb = load_workbook(self.archivo)
         ws = wb.get_active_sheet()
         alumnos = list()
-        encabezados = ("campus","nivel","grupo","matricula","apellido_paterno","apellido_materno","nombre")
+        encabezados = ("campus", "nivel", "grupo", "matricula", "apellido_paterno", "apellido_materno", "nombre")
         num_row = 0
         for row in ws.rows:
             if num_row != 0:
                 i = 0
                 alumno = dict()
-                for encabezado, cell in zip(encabezados,row):
+                for encabezado, cell in zip(encabezados, row):
                     if cell.value is not None:
-                        alumno.update({encabezado:cell.value})
+                        alumno.update({encabezado: cell.value})
                     i += 1
                 alumnos.append(alumno)
             num_row += 1
@@ -55,13 +55,15 @@ class ProcesadorAlumnos(object):
             else:
                 alumnoObj.update(nivel=alumno.get('nivel'))
                 alumnoObj = alumnoObj.last()
-                self.alumnos_actualizados +=1
+                self.alumnos_actualizados += 1
             # Guardar en grupo
-            grupo = Grupo.objects.filter(periodo__activo=True, grupo__iexact=alumno.get('grupo'),campus__iexact=alumno.get('campus'))
+            grupo = Grupo.objects.filter(periodo__activo=True, grupo__iexact=alumno.get('grupo'),
+                                         campus__iexact=alumno.get('campus'))
 
             if grupo.exists():
                 grupo = grupo.last()
                 grupo.alumnos.add(alumnoObj)
+
 
 class ProcesadorAlumnos2(object):
     alumnos = list()
@@ -76,15 +78,15 @@ class ProcesadorAlumnos2(object):
         ws = wb.get_active_sheet()
         alumnos = list()
         # encabezados = ("matricu","nivel","grupo","matricula","apellido_paterno","apellido_materno","nombre")
-        encabezados = ('matricula','nombre','nivel','telefono','telefono2','no_servicio_medico','tipo_seguro')
+        encabezados = ('matricula', 'nombre', 'nivel', 'telefono', 'telefono2', 'no_servicio_medico', 'tipo_seguro')
         num_row = 0
         for row in ws.rows:
             if num_row != 0:
                 i = 0
                 alumno = dict()
-                for encabezado, cell in zip(encabezados,row):
+                for encabezado, cell in zip(encabezados, row):
                     if cell.value is not None:
-                        alumno.update({encabezado:str(cell.value)})
+                        alumno.update({encabezado: str(cell.value)})
                     i += 1
                 alumnos.append(alumno)
             num_row += 1
@@ -108,20 +110,24 @@ class ProcesadorAlumnos2(object):
                     activo=True
                 )
                 if alumno.get('telefono') and len(alumno.get('telefono')) > 10:
-                    alumno.update({'telefono':alumno.get('telefono')[0:10]})
+                    alumno.update({'telefono': alumno.get('telefono')[0:10]})
                 if alumno.get('telefono2') and len(alumno.get('telefono2')) > 10:
-                    alumno.update({'telefono2':alumno.get('telefono2')[0:10]})
-                InformacionPersonal.objects.create(alumno=alumnoObj, telefono=alumno.get('telefono'), telefono2=alumno.get('telefono2'), no_servicio_medico=alumno.get('no_servicio_medico'), tipo_seguro=alumno.get('tipo_seguro'))
+                    alumno.update({'telefono2': alumno.get('telefono2')[0:10]})
+                InformacionPersonal.objects.create(alumno=alumnoObj, telefono=alumno.get('telefono'),
+                                                   telefono2=alumno.get('telefono2'),
+                                                   no_servicio_medico=alumno.get('no_servicio_medico'),
+                                                   tipo_seguro=alumno.get('tipo_seguro'))
                 self.alumnos_creados += 1
             else:
                 alumnoObj.update(nivel=alumno.get('nivel'))
-                self.alumnos_actualizados +=1
+                self.alumnos_actualizados += 1
             # Guardar en grupo
             # grupo = Grupo.objects.filter(periodo__activo=True, grupo__iexact=alumno.get('grupo'),campus__iexact=alumno.get('campus'))
             #
             # if grupo.exists():
             #     grupo = grupo.last()
             #     grupo.alumnos.add(alumnoObj)
+
 
 class ReaderFile(object):
     """
@@ -147,7 +153,7 @@ class ReaderFile(object):
                     if cell.value is not None:
                         obj.update({encabezado: str(cell.value)})
                     i += 1
-                obj.update({'num_fila':num_row})
+                obj.update({'num_fila': num_row})
                 data_file.append(obj)
             num_row += 1
         return data_file
@@ -161,14 +167,15 @@ class ProcesadorInstituciones(ReaderFile):
     instituciones_creadas = 0
     instituciones_actualizadas = 0
     errores = list()
-    encabezados = ['nombre','direccion','referencia','telefono','contacto_directo','contacto_directo_email','responsable_principal','nivel','subnivel','ambito','sector']
+    encabezados = ['nombre', 'direccion', 'referencia', 'telefono', 'contacto_directo', 'contacto_directo_email',
+                   'responsable_principal', 'nivel', 'subnivel', 'ambito', 'sector']
     form_class = InstitucionForm
 
     def verificar_informacion(self):
         for row in self.data_file:
             form = self.form_class(data=row)
             if not form.is_valid():
-                self.errores.append({'Fila {}'.format(row.get('num_fila')):form.errors})
+                self.errores.append({'Fila {}'.format(row.get('num_fila')): form.errors})
         if len(self.errores) > 0:
             print("Errores encontrados")
             print(self.errores)
@@ -187,11 +194,14 @@ class ProcesadorInstituciones(ReaderFile):
                     activo=True
                 )
                 if alumno.get('telefono') and len(alumno.get('telefono')) > 10:
-                    alumno.update({'telefono':alumno.get('telefono')[0:10]})
+                    alumno.update({'telefono': alumno.get('telefono')[0:10]})
                 if alumno.get('telefono2') and len(alumno.get('telefono2')) > 10:
-                    alumno.update({'telefono2':alumno.get('telefono2')[0:10]})
-                InformacionPersonal.objects.create(alumno=alumnoObj, telefono=alumno.get('telefono'), telefono2=alumno.get('telefono2'), no_servicio_medico=alumno.get('no_servicio_medico'), tipo_seguro=alumno.get('tipo_seguro'))
+                    alumno.update({'telefono2': alumno.get('telefono2')[0:10]})
+                InformacionPersonal.objects.create(alumno=alumnoObj, telefono=alumno.get('telefono'),
+                                                   telefono2=alumno.get('telefono2'),
+                                                   no_servicio_medico=alumno.get('no_servicio_medico'),
+                                                   tipo_seguro=alumno.get('tipo_seguro'))
                 self.alumnos_creados += 1
             else:
                 alumnoObj.update(nivel=alumno.get('nivel'))
-                self.alumnos_actualizados +=1
+                self.alumnos_actualizados += 1

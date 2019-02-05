@@ -11,8 +11,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView, DetailView, UpdateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django.views.generic import DeleteView
+from django.views.generic.base import View
 
 from apps.escuela.forms import AlumnoForm, DocenteCreateForm, InstitucionForm, ProyectoForm, PeriodoForm, GrupoForm, \
     ContactoEmergenciaForm, DocenteBaseForm, DiaPracticaForm, NotaForm, DiaClaseForm
@@ -78,6 +79,7 @@ class AlumnoListView(LoginRequiredMixin, ListView):
         return response
 
     def get(self, request, *args, **kwargs):
+        print("aqui estoy")
         if request.GET.get('export'):
             return self.export()
 
@@ -472,6 +474,34 @@ class PeriodoCreateView(LoginRequiredMixin, CreateView):
             Periodo.objects.all().update(activo=False)
         return super(PeriodoCreateView, self).form_valid(form)
 
+
+class PeriodooUpdateView(View):
+    model = Periodo
+    form_class = ProyectoForm
+    success_url = reverse_lazy('escuela:proyectos-list')
+    template_name = 'proyecto-form.html'
+
+
+    def post(self, request, **kwargs):
+        print("aqui estoy ?", request.POST)
+        data = request.POST
+        periodo_id = data.get("id")
+        if periodo_id:
+            try:
+                periodo = Periodo.objects.get(pk=periodo_id)
+                periodos = Periodo.objects.all()
+                periodos.update(activo=False)
+                periodo.activo = True
+                periodo.save()
+            except Exception as e:
+                return HttpResponse(status=404)
+        return HttpResponse(status=202)
+
+
+
+
+
+
 class GrupoListView(LoginRequiredMixin, ListView):
     model = Grupo
     template_name = 'grupo-list.html'
@@ -746,6 +776,7 @@ class SupervisorDetailView(LoginRequiredMixin, DetailView):
     template_name = 'supervisor-detail.html'
 
     def get_context_data(self, **kwargs):
+        print(kwargs)
         data = super(SupervisorDetailView, self).get_context_data(**kwargs)
         data.update({
             'title_page': self.get_object().usuario.get_full_name(),

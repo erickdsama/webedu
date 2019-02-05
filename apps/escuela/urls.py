@@ -6,7 +6,8 @@ from apps.escuela.views import AlumnoListView, AlumnoCreateView, DocenteListView
     GrupoUpdateView, AlumnoUpdateView, AlumnoDetailView, AlumnoDeleteView, DocenteDetailView, DocenteUpdateView, \
     DocenteDeleteView, InstitucionDetailView, InstitucionUpdateView, InstitucionDeleteView, ProyectoDetailView, \
     ProyectoUpdateView, ProyectoDeleteView, DiasPracticaView, DiasPracticaDelete, GrupoDetailView, DiadeClaseView, \
-    DiaClaseDeleteView, AgregarNotaView, RemoveAlumnoGrupo, SupervisorListView, SupervisorDetailView, EliminarNotaView
+    DiaClaseDeleteView, AgregarNotaView, RemoveAlumnoGrupo, SupervisorListView, SupervisorDetailView, EliminarNotaView, \
+    PeriodooUpdateView
 
 from apps.escuela.views import buscador
 
@@ -48,6 +49,7 @@ urlpatterns = [
 #     Periodos
     url(r'^periodos/', PeriodoListView.as_view(), name='periodos-list'),
     url(r'^agregar-periodo/', PeriodoCreateView.as_view(), name='periodos-create'),
+    url(r'^cambiar-periodo/', PeriodooUpdateView.as_view(), name='periodos-cambiar'),
 #     Grupos
     url(r'^grupos/', GrupoListView.as_view(), name='grupos-list'),
     url(r'^ver-grupo/(?P<pk>\d+)/', GrupoDetailView.as_view(), name='grupos-detail'),

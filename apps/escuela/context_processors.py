@@ -1,6 +1,8 @@
 from django.urls import reverse
 from django.core.urlresolvers import resolve
 
+from apps.escuela.models import Periodo
+
 
 def menu(request):
     menu = [
@@ -106,3 +108,8 @@ def menu(request):
         item.update({'active':current_url in item.get('urls_active')})
 
     return {'menu':menu}
+
+
+def periodo(request):
+    periodos = Periodo.objects.all()
+    return {"periodos": periodos}

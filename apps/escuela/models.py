@@ -74,6 +74,7 @@ TIPO_SEGURO_CHOICES = (
     ('Pensiones','Pensiones'),
     ('Privado','Privado'),
     ('Seguro popular','Seguro popular'),
+    ('Otro','Otro'),
 )
 class InformacionPersonal(models.Model):
     class Meta:
@@ -196,6 +197,7 @@ SEMESTRE_CHOICES = (
     ('1','Enero-Junio'),
     ('2','Agosto-Diciembre')
 )
+
 class Periodo(models.Model):
     class Meta:
         verbose_name = 'Periodo'

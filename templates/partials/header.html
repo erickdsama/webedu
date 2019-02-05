@@ -6,7 +6,6 @@
                 <img src="{% static 'img/practicas-edu.jpg' %}" width="100" alt="" class="m-r-10">
                 <a href="{% url 'home' %}" class="hidden-xs">
                     SIPEP
-{#                    <small>Sistema de Prácticas Educativas Profesionales</small>#}
                 </a>
 
                 <div class="menu-collapse" data-ma-action="sidebar-open" data-ma-target="main-menu">
@@ -18,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
             <div class="media-body h-search">
                 <form class="p-relative">
                     <div id="buscadorWrapper">
@@ -26,12 +25,40 @@
                         <i class="zmdi zmdi-search hs-reset" data-ma-action="search-clear"></i>
                         <div class="buscador-opciones" style="display: none">
                             <ul id="resultados-busqueda">
-
                             </ul>
                         </div>
                     </div>
                 </form>
             </div>
+        </div>
+        <style>
+            .bootstrap-select > .btn-default:before{
+                background: none;
+            }
+            .btn-group > .btn:first-child{
+                height: 50px;
+                background-color: rgba(255, 255, 255, 0.25)
+            }
+            .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
+                background-color: rgba(255, 255, 255, 0.25)
+            }
+            .bootstrap-select.btn-group .dropdown-toggle .filter-option{
+                color: white;
+                padding: 8px;
+            }
+        </style>
+        <div class="col-md-2">
+            <form action="">
+                <select style="height: 50px; color: white" id="periodo__select"  class="selectpicker">
+                    {% for item in periodos %}
+                        {% if item.activo %}
+                            <option style="height: 50px" value="{{ item.id }}" selected>{{ item.ano }} - {{ item.semestre }}</option>
+                        {% else %}
+                            <option style="height: 50px"  value="{{ item.id }}">{{ item.ano }} - {{ item.semestre }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </form>
         </div>
         <div class="col md-2">
             <ul class="pull-right h-menu">
