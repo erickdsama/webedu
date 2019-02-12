@@ -78,7 +78,7 @@ class ProcesadorAlumnos2(object):
         ws = wb.get_active_sheet()
         alumnos = list()
         # encabezados = ("matricu","nivel","grupo","matricula","apellido_paterno","apellido_materno","nombre")
-        encabezados = ('matricula', 'nombre', 'nivel', 'telefono', 'telefono2', 'no_servicio_medico', 'tipo_seguro')
+        encabezados = ('matricula', 'email', 'nombre', 'nivel', 'telefono', 'telefono2', 'no_servicio_medico', 'tipo_seguro')
         num_row = 0
         for row in ws.rows:
             if num_row != 0:

@@ -1,6 +1,7 @@
 import datetime
 import json
 
+from django import template
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import Group
@@ -347,12 +348,19 @@ class InstitucionCreateView(LoginRequiredMixin, CreateView):
         data.update({'title_page':'Crear nueva Institución'})
         return data
 
+
 class InstitucionDetailView(LoginRequiredMixin, DetailView):
     model = Institucion
     template_name = 'institucion-detail.html'
+    register = template.Library()
 
     def get_context_data(self, **kwargs):
-        return super(InstitucionDetailView, self).get_context_data(title_page="Institución {}".format(self.object.nombre))
+        context = super(InstitucionDetailView, self).get_context_data(title_page="Institución {}".format(self.object.nombre))
+        institucion = self.get_object()
+        proyectos = institucion.proyectos.filter(archivo=False)
+        context["proyectos"] = proyectos
+        return context
+
 
 class InstitucionUpdateView(LoginRequiredMixin, UpdateView):
     model = Institucion

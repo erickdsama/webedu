@@ -243,6 +243,7 @@ class Grupo(models.Model):
         alumnos = self.alumnos.all().annotate(matricula_length=Length('matricula'))
         return alumnos.order_by('matricula_length','matricula')
 
+
 NIVEL_CHOICES = (
     ('Inicial','Inicial'),
     ('Básico','Básico'),
@@ -266,7 +267,13 @@ AMBITO_CHOICES = (
     ('Gestión Educativa', 'Gestión Educativa'),
     ('Investigación Educativa', 'Investigación Educativa'),
     ('Gestión Cultural', 'Gestión Cultural'),
+    ('Social', 'Social'),
+    ('Público', 'Público'),
+    ('Privado', 'Privado'),
+    ('Empresarial', 'Empresarial'),
+    ('Industrial y Gubernamental', 'Industrial y Gubernamental'),
 )
+
 SECTOR_CHOICES = (
     ('Privado','Privado'),
     ('Público','Público'),
