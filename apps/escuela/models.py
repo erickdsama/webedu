@@ -260,12 +260,10 @@ SUBNIVEL_CHOICES = (
     ('Posgrado','Posgrado')
 )
 AMBITO_CHOICES = (
-    ('Docencia', 'Docencia'),
     ('Educación Comunitaria', 'Educación Comunitaria'),
     ('Educación Especial', 'Educación Especial'),
     ('Capacitación Industrial y Empresarial', 'Capacitación Industrial y Empresarial'),
     ('Gestión Educativa', 'Gestión Educativa'),
-    ('Investigación Educativa', 'Investigación Educativa'),
     ('Gestión Cultural', 'Gestión Cultural'),
     ('Social', 'Social'),
     ('Público', 'Público'),
